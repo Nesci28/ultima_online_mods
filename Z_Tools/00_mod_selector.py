@@ -410,7 +410,7 @@ class ImageCheckbox(tk.Frame):
         self.label.pack(side=tk.LEFT)
         self.label.bind("<Button-1>", self.toggle)
 
-        self.variable.trace("w", self.update_image)
+        self.variable.trace_add("write", self.update_image)
         self.update_image()  
 
     def toggle(self, event=None):

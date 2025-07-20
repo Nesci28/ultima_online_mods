@@ -1,13 +1,5 @@
 pillow
-glob
-re
 numpy
-colorsys
-random
 blend_modes
-pathlib
 psd-tools
 tqdm
-contextlib
-warnings
-tkinter
