@@ -1,7 +1,9 @@
 #!/bin/bash
 
 AI_BASE="converted/ai"
-MAGICK_BASE="converted/magick"
+MAGICK_BASE_FUZZ0="converted/magick_fuzz0"
+MAGICK_BASE_FUZZ5="converted/magick_fuzz5"
+MAGICK_BASE_FUZZ10="converted/magick_fuzz10"
 
 echo "Finding PSD files matching pattern: _0x[0-9A-Fa-f]+.psd"
 
@@ -42,9 +44,23 @@ find . -type f | grep -E "_0x[0-9A-Fa-f]+\.psd$" | while read -r file; do
 	fi
 
     # Magick output
-    magick_dir="$MAGICK_BASE/$dir"
+    magick_dir="$MAGICK_BASE_FUZZ0/$dir"
     mkdir -p "$magick_dir"
     magick_file="$magick_dir/$decimal.png"
     echo "Exporting $file to $magick_file (hex=$hex, dec=$decimal) with black -> transparent"
     convert "$file[0]" -colorspace sRGB PNG32:- | magick - -transparent black "$magick_file"
+
+    # Magick output
+    magick_dir="$MAGICK_BASE_FUZZ5/$dir"
+    mkdir -p "$magick_dir"
+    magick_file="$magick_dir/$decimal.png"
+    echo "Exporting $file to $magick_file (hex=$hex, dec=$decimal) with black -> transparent"
+    convert "$file[0]" -colorspace sRGB PNG32:- | magick - -fuzz 5% -transparent black "$magick_file"
+
+    # Magick output
+    magick_dir="$MAGICK_BASE_FUZZ10/$dir"
+    mkdir -p "$magick_dir"
+    magick_file="$magick_dir/$decimal.png"
+    echo "Exporting $file to $magick_file (hex=$hex, dec=$decimal) with black -> transparent"
+    convert "$file[0]" -colorspace sRGB PNG32:- | magick - -fuzz 10% -transparent black "$magick_file"
 done
